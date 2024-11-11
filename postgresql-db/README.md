@@ -1,47 +1,63 @@
 # PostgreSQL Database dump
 
-This is where the database dump is stored
+This is where the database dump is stored. Create dumps is the best way to keep track of database changes
+
+We have two files, one is a schema (tables) dump called `tensu.sql` and the other is a data dump called `data-examples.sql` 
 
 # Restore from dump
 
-## From command-line
+1. (Optional) Delete an old tensu database if it exists:
 
-1. (Optional) Create a new database if it doesn't exist:
+```
+sudo -u postgres dropdb tensu
+```
+
+2. Create a new empty database:
 
 ```
 sudo -u postgres createdb tensu
 ```
 
-2. cd to this directory and restore from local file:
+3. cd to this directory and restore schema from local file:
 
 ```
-psql -U postgres -d tensu -f tensu.sql
+psql -U tensu_master -d tensu -f tensu.sql
 ```
 
-## Using pgAdmin
+4. (Optional) Restore data example:
 
-1. Open pgAdmin and connect to the server
+```
+psql -U tensu_master -d tensu -f data-example.sql
+```
 
-2. (Optional) Navigate to the "Databases" section, right-click on the server, and select "Create" > "Database...". Enter "tensu" as the database name and click "Save"
+### All in one:
 
-3. Right-click on the "tensu" database and select "Restore". In the dialog box that appears, navigate to this directory and select "tensu.sql" file. Click "Restore"
+```
+sudo -u postgres dropdb tensu
+sudo -u postgres createdb tensu
+psql -U tensu_master -d tensu -f tensu.sql
+psql -U tensu_master -d tensu -f data-example.sql
+```
 
 # Create dump
 
-## From command-line
-
 1. Open terminal and cd to this directory
 
-2. Create dump:
+2. Create schema dump:
 
 ```
-pg_dump -U postgres tensu > tensu.sql
+pg_dump -U tensu_master -s tensu > tensu.sql
 ```
 
-## Using pgAdmin
+3. (Optional) Create data dump if you provide a new data example for changed schema:
 
-1. Open pgAdmin and connect to the server
+```
+pg_dump -U tensu_master -a tensu > data-example.sql
+```
 
-2. Navigate to the "Databases" section and right-click on the "tensu" database and select "Backup..."
+### All in one:
 
-3. In the window that appears, click on folder icon in "Filename" field, select the "tensu.sql" file in this directory. Click "Backup"
+```
+pg_dump -U tensu_master -s tensu > tensu.sql
+pg_dump -U tensu_master -a tensu > data-example.sql
+```

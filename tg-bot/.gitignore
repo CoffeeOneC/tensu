@@ -1,6 +1,7 @@
 __pacache__/
 
 # Environments
+config.env
 .env
 .venv
 env/
